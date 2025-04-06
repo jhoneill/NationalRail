@@ -94,9 +94,11 @@ function Get-StationBoard    {
         }
     }
     if (-not $response.busServices)   {$result = $response.trainServices}
-    else                              {$result = $response.trainServices + $response.busServices |   # if scheduled time of arrival/departure is the other side of midnight sort as tomorrow...
+    elseif  ($response.trainServices) {$result = $response.trainServices + $response.busServices |   # if scheduled time of arrival/departure is the other side of midnight sort as tomorrow...
                                          Sort-Object -Property  @{e={if ($response.generatedAt.Hour -gt 20 -and ($_.std -like "0*" -or $_.sta -like "0*")) {$response.generatedAt.AddDays(1)} else  {$response.generatedAt}}},
                                                                 @{e={if ($_.std) {$_.std} else {$_.sta} }} }
+    else                              {$result = $response.busServices}
+    if (-not $result) { {Write-Warning "No Matching trains" ; return }}
     $result |
         Add-Member -PassThru -NotePropertyName generatedTime     -NotePropertyValue $response.generatedAt |
         Add-Member -PassThru -NotePropertyName generatedlocation -NotePropertyValue $response.locationName |
@@ -125,11 +127,12 @@ function Get-NextDeparture   {
         [Switch]$NoDetails,
         [Switch]$Fastest
     )
-    if     ( $NoDetails  -and ($Fastest -or $MyInvocation.InvocationName -eq "Get-FastestDeparture"  )) {$url = "/GetArrivalBoard/"           + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
-    elseif (                   $Fastest -or $MyInvocation.InvocationName -eq "Get-FastestDeparture"   ) {$url = "/GetArrBoardWithDetails/"    + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
-    elseif ( $NoDetails )                                                                               {$url = "/GetArrivalDepartureBoard/"  + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
-    else                                                                                                {$url = "/GetArrDepBoardWithDetails/" + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
+    if     ( $NoDetails  -and ($Fastest -or $MyInvocation.InvocationName -eq "Get-FastestDeparture"  )) {$url = "/GetFastestDepartures/"               + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
+    elseif (                   $Fastest -or $MyInvocation.InvocationName -eq "Get-FastestDeparture"   ) {$url = "/GetFastestDeparturesWithDetails/"    + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
+    elseif ( $NoDetails )                                                                               {$url = "/GetNexttDepartures/"                 + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
+    else                                                                                                {$url = "/GetFastestDeparturesWithDetails/"    + $StationCode.ToUpper() + "/" + $FilterList.ToUpper()}
     $response = Invoke-NationalRail -Url $url  -Params  @{numRows = $Rows; timeOffset = $OffsetMinutes; timeWindow  = $WindowMinutes}
+    if (-not $response.departures.service) {Write-Warning "No Matching trains" ; return}
     $response.departures.service |
         Add-Member -PassThru -NotePropertyName generatedTime     -NotePropertyValue $response.generatedAt  |
         Add-Member -PassThru -NotePropertyName generatedlocation -NotePropertyValue $response.locationName |
