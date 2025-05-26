@@ -16,7 +16,8 @@ You can then import the module.
 If you don't know the station codes you need, you can download a list with `Export-StationList` or discover them on National Rail's web site.
 
 ## Boards
-`Get-StationBoard PAD` will get 10 rows of detailed arrivals and departures for Paddington. You can request fewer rows with the `Rows` parameter, but the National Rail's service sends a maximum of 10 *detailed* rows.
+`Get-StationBoard PAD` will get 10 rows of detailed arrivals and departures for Paddington. 
+You can request fewer rows with the `Rows` parameter, but National Rail's service sends a maximum of 10 *detailed* rows.
 ```
     Station: London Paddington
 
@@ -31,14 +32,14 @@ A          19:11 To Abbey Wood          On time    Calling at: Bond Street, Tott
 2          19:13 To Swindon             On time    Calling at: Reading, Didcot Parkway, Swindon.
 ...
 ```
-**Arrival from** means the train terminates here. If there is no **Service from** in the details, that means the train starts here.
+**Arrival from** means the train *terminates* here. If there is no **Service from** in the details, that means the train *starts* here.
 
-`Get-StationBoard PAD -NoDetails`  will get 10 rows of arrivals and departures for Paddington without details, and the 10-row limit no longer applies.    
+`Get-StationBoard PAD -NoDetails`  will get 10 rows of arrivals and departures for Paddington *without* details, and the 10-row limit no longer applies.    
 
 `Get-RailArrivals` and `Get-RailDepartures` are aliases for `Get-StationBoard`; when they are used, the command requests only arrivals or only departures. 
 
 All three forms take parameters `-OffSetMinutes` and `-WindowMinutes` e.g. `-OffSetMinutes 60  -WindowMinutes 15` requests trains expected in 60-75 minutes.     
-Even if you request 1000 rows and 1000 minute window the service seems to be limited to a maximum of two hours.
+Even if you request 1000 rows and a 1000 minute window, the service seems to be limited to a maximum of two hours.
   
 `Get-RailDepartures Pad -no -ro 30` will display 30 rows for departures, without details, which means no stops are listed and the service ID appears instead.
 ```

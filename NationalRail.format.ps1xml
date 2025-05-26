@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Configuration>
-  <Controls>
-        <Control><Name>StationGrouping</Name><CustomControl>
-                <CustomEntries>
-                    <CustomEntry><CustomItem><Frame>
-                        <LeftIndent>4</LeftIndent>
-                        <CustomItem><Text>Station: </Text><ExpressionBinding><PropertyName>generatedlocation</PropertyName></ExpressionBinding><NewLine/></CustomItem>
-                     </Frame></CustomItem></CustomEntry>
-                </CustomEntries>
-        </CustomControl></Control>
-   </Controls>
-  <ViewDefinitions>
-    <View><Name>NationalRailService</Name><ViewSelectedBy><TypeName>NationalRailService</TypeName></ViewSelectedBy>
-      <GroupBy>
-        <PropertyName>generatedlocation</PropertyName>
-        <CustomControlName>StationGrouping</CustomControlName>
-      </GroupBy>
-
-      <TableControl>
-        <TableHeaders>
-          <TableColumnHeader><Label>Platform</Label><Width>10</Width><Alignment>Left</Alignment></TableColumnHeader>
-          <TableColumnHeader><Label>Service</Label><Width>40</Width><Alignment>Left</Alignment></TableColumnHeader>
-          <TableColumnHeader><Label>Expected</Label><Width>10</Width><Alignment>Left</Alignment></TableColumnHeader>
-          <TableColumnHeader><Label>Details</Label><Alignment>Left</Alignment></TableColumnHeader>
-        </TableHeaders>
-        <TableRowEntries><TableRowEntry><wrap/>
-            <TableColumnItems>
-              <TableColumnItem><PropertyName>Platform</PropertyName><Alignment>Left</Alignment> </TableColumnItem>
-              <TableColumnItem><ScriptBlock>
-                    $( if ($_.std) {$_.std} else {$_.sta} ) +
-                    $( if ($_.destination.locationName -ne $_.generatedlocation) {' To ' + $_.destination.locationName }
-                    else {" Arrival from " + $_.origin[0].locationName} )
-              </ScriptBlock><Alignment>Left</Alignment></TableColumnItem>
-              <TableColumnItem><ScriptBlock>  if ($_.isCancelled) {'Cancelled'} elseif ($_.std) {$_.etd} else {$_.eta}</ScriptBlock></TableColumnItem>
-              <TableColumnItem><ScriptBlock>
-                    $(if (      $_.delayReason)   {$_.delayReason  +  '. '} else {''} ) +
-                    $(if (      $_.cancelReason)  {$_.Cancelreason + "."}
-                      elseif (  $_.subsequentCallingPoints) {'Calling at: '  + ($_.subsequentCallingPoints.CallingPoint.LocationName -join ', ') +'. '}) +
-                    $(if (      $_.origin[0].locationName -ne $_.generatedlocation -and -not $_.isCancelled) {"(Service from " + $_.origin[0].locationName + ") "   })+
-                    $(if ((-not $_.cancelReason) -and (-not $_.subsequentCallingPoints) -and (-not $_.previousCallingPoints)) {'serviceID: '  + $_.serviceID}) +
-                    $(if     ($_.isReverseFormation) {'Train is in reverse formation.'}  )
-              </ScriptBlock></TableColumnItem>
-            </TableColumnItems></TableRowEntry></TableRowEntries>
-      </TableControl></View>
-  </ViewDefinitions>
+    <Controls>
+        <Control>
+            <Name>StationGrouping</Name>
+            <CustomControl><CustomEntries><CustomEntry><CustomItem><Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem><Text>Station: </Text><ExpressionBinding><PropertyName>generatedlocation</PropertyName></ExpressionBinding><NewLine/></CustomItem>
+            </Frame></CustomItem></CustomEntry></CustomEntries></CustomControl>
+        </Control>
+    </Controls>
+    <ViewDefinitions>
+        <View>
+            <Name>NationalRailService</Name>
+            <ViewSelectedBy><TypeName>NationalRailService</TypeName></ViewSelectedBy>
+            <GroupBy>
+                <PropertyName>generatedlocation</PropertyName>
+                <CustomControlName>StationGrouping</CustomControlName>
+            </GroupBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader><Label>Platform</Label><Width>10</Width><Alignment>Left</Alignment></TableColumnHeader>
+                    <TableColumnHeader><Label>Service</Label><Width>40</Width><Alignment>Left</Alignment></TableColumnHeader>
+                    <TableColumnHeader><Label>Expected</Label><Width>10</Width><Alignment>Left</Alignment></TableColumnHeader>
+                    <TableColumnHeader><Label>Details</Label><Alignment>Left</Alignment></TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries><TableRowEntry><wrap/><TableColumnItems>
+                    <TableColumnItem><PropertyName>Platform</PropertyName><Alignment>Left</Alignment> </TableColumnItem>
+                    <TableColumnItem><ScriptBlock>
+                        $( if ($_.std) {$_.std} else {$_.sta} ) +
+                        $( if ($_.destination.locationName -ne $_.generatedlocation) {' To ' + $_.destination.locationName }
+                        else {" Arrival from " + $_.origin[0].locationName} )
+                    </ScriptBlock><Alignment>Left</Alignment></TableColumnItem>
+                    <TableColumnItem><ScriptBlock>  if ($_.isCancelled) {'Cancelled'} elseif ($_.std) {$_.etd} else {$_.eta}</ScriptBlock></TableColumnItem>
+                    <TableColumnItem><ScriptBlock>
+                        $(if (      $_.delayReason)   {$_.delayReason  +  '. '} else {''} ) +
+                        $(if (      $_.cancelReason)  {$_.Cancelreason + "."}
+                          elseif (  $_.subsequentCallingPoints) {'Calling at: '  + ($_.subsequentCallingPoints.CallingPoint.LocationName -join ', ') +'. '}) +
+                        $(if (      $_.origin[0].locationName -ne $_.generatedlocation -and -not $_.isCancelled) {"(Service from " + $_.origin[0].locationName + ") "   })+
+                        $(if ((-not $_.cancelReason) -and (-not $_.subsequentCallingPoints) -and (-not $_.previousCallingPoints)) {'serviceID: '  + $_.serviceID}) +
+                        $(if     ($_.isReverseFormation) {'Train is in reverse formation.'}  )
+                    </ScriptBlock></TableColumnItem>
+                </TableColumnItems></TableRowEntry></TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
 </Configuration>
