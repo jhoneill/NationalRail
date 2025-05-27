@@ -1,7 +1,7 @@
 if (Test-Path ("$env:USERPROFILE\natrail.xml"))  { $natRailCred  = Import-Clixml "$env:USERPROFILE\natrail.xml"  }
 else {
         throw "Could not find $env:USERPROFILE\natrail.xml; get a key at https://realtime.nationalrail.co.uk/OpenLDBWSRegistration and " + [System.Environment]::NewLine +
-              "save it with Get-Credential -user 'token' -messsage 'Paste Nationalrail key' | Export-Clixml  $env:USERPROFILE\natrail.xml "
+              "save it with Get-Credential -user 'token' -message 'Paste Nationalrail key' | Export-Clixml  $env:USERPROFILE\natrail.xml "
 }
 
 function Export-StationList  {

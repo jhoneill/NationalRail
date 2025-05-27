@@ -5,7 +5,7 @@
 ## Usage
 
 [Register for use with the National Rail site](http://realtime.nationalrail.co.uk/OpenLDBWSRegistration). National Rail will email you a token. Copy this and run    
-`Get-Credential -user 'token' -messsage 'Paste National Rail key' | Export-Clixml  '$env:USERPROFILE\natrail.xml' `
+`Get-Credential -user 'token' -message 'Paste National Rail key' | Export-Clixml  '$env:USERPROFILE\natrail.xml' `
 
 Keep the key safe because if you use a different computer or a different user account you will need to re-create the XML file.    
 Connections to the service logon using basic authentication with "token" as the user name. 
