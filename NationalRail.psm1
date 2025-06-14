@@ -98,7 +98,7 @@ function Get-StationBoard    {
                                          Sort-Object -Property  @{e={if ($response.generatedAt.Hour -gt 20 -and ($_.std -like "0*" -or $_.sta -like "0*")) {$response.generatedAt.AddDays(1)} else  {$response.generatedAt}}},
                                                                 @{e={if ($_.std) {$_.std} else {$_.sta} }} }
     else                              {$result = $response.busServices}
-    if (-not $result) { {Write-Warning "No Matching trains" ; return }}
+    if (-not $result) { Write-Warning "No Matching trains" ; return }
     $result |
         Add-Member -PassThru -NotePropertyName generatedTime     -NotePropertyValue $response.generatedAt |
         Add-Member -PassThru -NotePropertyName generatedlocation -NotePropertyValue $response.locationName |
